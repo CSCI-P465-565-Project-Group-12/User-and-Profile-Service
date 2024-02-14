@@ -2,21 +2,24 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
-model User {
-  id           Int      @id @default(autoincrement())
+generator client {
+  provider = "prisma-client-js"
+}
+model Users {
+  id           String      @id 
   email        String   @unique
+  username     String   @unique
   password     String
   role         UserRole
   is_verified  Boolean
-  profile      Profile?
+  profile      Profiles?
   security     Security?
 }
 
-model Profile {
+model Profiles {
   profile_id    String  @id
-  user          User    @relation(fields: [userId], references: [id])
-  userId        Int
+  user          Users    @relation(fields: [userId], references: [id])
+  userId        String     @unique
   first_name    String
   last_name     String
   contact_number String
@@ -25,13 +28,12 @@ model Profile {
 
 model Security {
   security_id String @id
-  user        User   @relation(fields: [userId], references: [id])
-  userId      Int
+  user        Users   @relation(fields: [userId], references: [id])
+  userId      String    @unique
   duo_auth_id String
 }
 
 enum UserRole {
-  Admin
   VenueOwner
   RegularUser
 }
