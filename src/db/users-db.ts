@@ -1,7 +1,5 @@
 // import { Pool } from "pg";
-import { User } from "../models/User";
-import { Profile } from "../models/Profile";
-import { Security } from "../models/Security";
+import { User, UpdateUserParams } from "../models/User";
 
 import { PrismaClient } from "@prisma/client";
 
@@ -58,20 +56,18 @@ const prisma = new PrismaClient();
 // };
 
 
-// import { PrismaClient } from '@prisma/client';
-
-// const prisma = new PrismaClient();
-
 /**
  * 
  * @param {User} user 
  * @returns the promise that results in creating a user
  */
 export const createUser = async (user: User) => {
-	const {email, password, role, is_verified} = user;
-	return await prisma.user.create({
+	const {id, email,username, password, role, is_verified} = user;
+	return await prisma.users.create({
 		data: {
+			id,
 			email,
+			username,
 			password,
 			role,
 			is_verified,
@@ -79,37 +75,34 @@ export const createUser = async (user: User) => {
 	});
 };
 
-/**
- * 
- * @param {Profile} profile
- * @returns the promise that results in creating a profile
- */
-export const createProfile = async (profile: Profile) => {
-	const {profile_id, user_id, first_name, last_name, contact_number, bio} = profile;
-	return await prisma.profile.create({
-		data: {
-			profile_id,
-			user_id,
-			first_name,
-			last_name,
-			contact_number,
-			bio,
+export const checkUserNameAvailability = async (username: string) => {
+	return await prisma.users.findUnique({
+		where: {
+			username: String(username),
 		},
 	});
 };
 
-/**
- * 
- * @param {Security} security
- * @returns the promise that results in creating a security
- */
-export const createSecurity = async (security: Security) => {
-	const {security_id, user_id, duo_auth_id} = security;
-	return await prisma.security.create({
-		data: {
-			security_id,
-			user_id,
-			duo_auth_id,
-		},
-	});
-};
+
+export const updateUser = async(username: string, updateParams: UpdateUserParams) =>{
+    return await prisma.users.update({
+      where: {
+        username: username,
+      },
+      data: {
+        ...updateParams,
+      },
+    });
+}
+
+// Example usage
+// const usernameToUpdate = 'user123';
+// const updates = {
+//   email: 'newemail@example.com',
+//   is_verified: true,
+//   role: 'RegularUser', // Ensure this matches one of the options in your UserRole enum
+// };
+
+// updateUser(usernameToUpdate, updates)
+//   .then(() => console.log('User updated successfully'))
+//   .catch((error) => console.error('Failed to update user', error));
