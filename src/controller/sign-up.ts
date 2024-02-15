@@ -10,12 +10,12 @@ dotenv.config();
 
 
 // Duo 2FA setup
-const apiHost = process.env.DUO_API_HOST || "";
-const clientId= process.env.DUO_CLIENT_ID || "";
-const clientSecret = process.env.DUO_CLIENT_SECRET || "";
-const redirectUrl = process.env.REDIRECT_URL || "";
-const duoClient = new Client({ clientId, clientSecret, apiHost, redirectUrl });
+const apiHost = process.env.DUO_API_HOST as string;
+const clientId= process.env.DUO_CLIENT_ID as string;
+const clientSecret = process.env.DUO_CLIENT_SECRET as string;
+const redirectUrl = process.env.REDIRECT_URL as string;
 
+const duoClient = new Client({ clientId, clientSecret, apiHost, redirectUrl });
 
 
 /**
@@ -46,7 +46,7 @@ export const signUp = async (req:Request, res:Response) => {
 			const state = duoClient.generateState();
 			req.session.duo = { state, username };
 			const url = duoClient.createAuthUrl(username, state);
-			res.redirect(302, url);
+			res.json({ url })
 		}
 		catch (error) {
 			console.error(error);
