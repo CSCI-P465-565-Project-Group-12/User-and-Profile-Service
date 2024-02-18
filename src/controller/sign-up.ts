@@ -6,6 +6,7 @@ import { createSecurity } from "../db/security-db";
 import dotenv from "dotenv"; 
 import { v4 as uuidv4 } from "uuid";
 import { Client } from "@duosecurity/duo_universal";
+import { redisClient } from "../app";
 dotenv.config();
 
 
@@ -16,7 +17,6 @@ const clientSecret = process.env.DUO_CLIENT_SECRET as string;
 const redirectUrl = process.env.REDIRECT_URL as string;
 
 const duoClient = new Client({ clientId, clientSecret, apiHost, redirectUrl });
-
 
 /**
  * /signup
@@ -44,8 +44,9 @@ export const signUp = async (req:Request, res:Response) => {
 		try{
 			await duoClient.healthCheck();
 			const state = duoClient.generateState();
-			req.session.duo = { state, username };
 			const url = duoClient.createAuthUrl(username, state);
+			const duoState=state;
+			await redisClient.hSet(duoState,{username});
 			res.json({ url })
 		}
 		catch (error) {
@@ -63,15 +64,19 @@ export const signUp = async (req:Request, res:Response) => {
 export const redirect = async (req:Request, res:Response) => {
 	const { query, session } = req;
 	const duo_code = query.duo_code as string || "";
-	const state = query.state;
-	const savedState = session.duo?.state;
-	const savedUsername = session.duo?.username ?? "";
+	const state = query.state as string || "";
+	const redisData = await redisClient.hGetAll(state);
+	const savedUsername = redisData.username;
+	
 	req.session.destroy((err) => {
 		if (err) {
 			console.error("Error destroying session:", err);
-			res.status(500).json({ message: "An error occurred while destroying session." });
+			// res.status(500).json({ message: "An error occurred while destroying session." });
+			console.log("Error destroying session:", err);
+			
 		} else {
-			res.send("Session destroyed successfully");
+			// res.send("Session destroyed successfully");
+			console.log("Session destroyed successfully");
 		}
 	});
 	try {
@@ -80,7 +85,10 @@ export const redirect = async (req:Request, res:Response) => {
 			duo_code,
 			savedUsername
 		);
-		res.status(201).json({ message: JSON.stringify(decodedToken, null, "\t") });
+		console.log("decodedToken", decodedToken);
+		const redirectUrl = `https://localhost:5173/?user=${encodeURIComponent(JSON.stringify(updatedUser))}`;
+		res.redirect(redirectUrl);
+		
 	} catch (err) {
 		console.error(err);
 	}
