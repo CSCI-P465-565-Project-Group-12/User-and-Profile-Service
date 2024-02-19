@@ -55,7 +55,7 @@ export const redirect = async (req:Request, res:Response) => {
 	const state = query.state as string || "";
 	const redisData = await redisClient.hGetAll(state);
 	const savedUsername = redisData.username;
-	
+	await redisClient.del(state);
 	req.session.destroy((err) => {
 		if (err) {
 			console.error("Error destroying session:", err);
