@@ -24,6 +24,7 @@ export const redisClient = createClient({
         port: process.env.REDIS_PORT as unknown as number
     }
 });
+export const clientHost = process.env.CLIENT_HOST as string;
 redisClient.connect();
 redisClient.on('connect', ()=>{
 	console.log('connected to redis');

@@ -6,7 +6,7 @@ import { createSecurity } from "../db/security-db";
 import dotenv from "dotenv"; 
 import { v4 as uuidv4 } from "uuid";
 import { Client } from "@duosecurity/duo_universal";
-import { redisClient } from "../app";
+import { redisClient, clientHost } from "../app";
 dotenv.config();
 
 
@@ -28,19 +28,7 @@ export const signUp = async (req:Request, res:Response) => {
     const id = uuidv4();
 	try {
 		const hashedPassword = await bcrypt.hash(password, 10);
-		console.log("hashedPassword and trying to write sign-up logic here", hashedPassword);
 		const user = await createUser({ id, email, username, password: hashedPassword, role, is_verified: false });
-		// await createProfile({
-		//   profile_id: 'generate-uuid-here', // Use a UUID generator
-		//   user_id: user.id,
-		//   first_name: firstName,
-		//   last_name: lastName,
-		//   contact_number: contactNumber,
-		//   bio: '',
-		// });
-
-		// Initialize Duo 2FA setup
-		// console.log('Duo 2FA setup', apiHost, clientId, clientSecret, redirectUrl, process.env.DUO_CLIENT_ID)
 		try{
 			await duoClient.healthCheck();
 			const state = duoClient.generateState();
@@ -86,7 +74,7 @@ export const redirect = async (req:Request, res:Response) => {
 			savedUsername
 		);
 		console.log("decodedToken", decodedToken);
-		const redirectUrl = `https://localhost:5173/?user=${encodeURIComponent(JSON.stringify(updatedUser))}`;
+		const redirectUrl = clientHost+`/login`;
 		res.redirect(redirectUrl);
 		
 	} catch (err) {
