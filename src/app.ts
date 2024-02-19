@@ -5,6 +5,8 @@ import cors from "cors";
 import router from "./routes";
 import session from "express-session";
 import { createClient } from 'redis';
+import connectRedis from 'connect-redis';
+
 import dotenv from "dotenv";
 dotenv.config();
 declare module "express-session" {
@@ -17,6 +19,7 @@ declare module "express-session" {
 
 const app: Express = express();
 const port: number = 8080;
+
 export const redisClient = createClient({
     password: process.env.REDIS_PASSWORD as string,
     socket: {
@@ -35,6 +38,7 @@ app.use(express.urlencoded({
 }));
 
 app.use(session({
+	store:new connectRedis({client:redisClient}),
 	secret: "super-secret-phrase",
 	resave: false,
 	saveUninitialized: false,
