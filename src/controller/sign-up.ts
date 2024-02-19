@@ -74,7 +74,7 @@ export const redirect = async (req:Request, res:Response) => {
 			savedUsername
 		);
 		console.log("decodedToken", decodedToken);
-		const redirectUrl = clientHost+"register-success";
+		const redirectUrl = clientHost;
 		res.redirect(redirectUrl);
 		
 	} catch (err) {
