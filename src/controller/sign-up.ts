@@ -68,13 +68,13 @@ export const redirect = async (req:Request, res:Response) => {
 		}
 	});
 	try {
-		const updatedUser = await updateUser(savedUsername, { is_verified: true });
+		// const updatedUser = await updateUser(savedUsername, { is_verified: true });
 		const decodedToken = await duoClient.exchangeAuthorizationCodeFor2FAResult(
 			duo_code,
 			savedUsername
 		);
 		console.log("decodedToken", decodedToken);
-		const redirectUrl = clientHost+`/login`;
+		const redirectUrl = clientHost+"register-success";
 		res.redirect(redirectUrl);
 		
 	} catch (err) {
