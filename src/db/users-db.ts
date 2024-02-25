@@ -75,7 +75,7 @@ export const createUser = async (user: User) => {
 	});
 };
 
-export const checkUserNameAvailability = async (username: string) => {
+export const getUser = async (username: string) => {
 	return await prisma.users.findUnique({
 		where: {
 			username: String(username),
@@ -85,15 +85,15 @@ export const checkUserNameAvailability = async (username: string) => {
 
 
 export const updateUser = async(username: string, updateParams: UpdateUserParams) =>{
-    return await prisma.users.update({
-      where: {
-        username: username,
-      },
-      data: {
-        ...updateParams,
-      },
-    });
-}
+	return await prisma.users.update({
+		where: {
+			username: username,
+		},
+		data: {
+			...updateParams,
+		},
+	});
+};
 
 // Example usage
 // const usernameToUpdate = 'user123';

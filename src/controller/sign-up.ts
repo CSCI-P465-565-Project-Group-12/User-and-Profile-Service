@@ -5,18 +5,10 @@ import { createProfile } from "../db/profiles-db";
 import { createSecurity } from "../db/security-db";
 import dotenv from "dotenv"; 
 import { v4 as uuidv4 } from "uuid";
-import { Client } from "@duosecurity/duo_universal";
-import { redisClient, clientHost } from "../app";
+import { redisClient, clientHost, duoClient, jwtSecret } from "../app";
+import jwt from "jsonwebtoken";
 dotenv.config();
 
-
-// Duo 2FA setup
-const apiHost = process.env.DUO_API_HOST as string;
-const clientId= process.env.DUO_CLIENT_ID as string;
-const clientSecret = process.env.DUO_CLIENT_SECRET as string;
-const redirectUrl = process.env.REDIRECT_URL as string;
-
-const duoClient = new Client({ clientId, clientSecret, apiHost, redirectUrl });
 
 /**
  * /signup
@@ -25,7 +17,7 @@ const duoClient = new Client({ clientId, clientSecret, apiHost, redirectUrl });
  */
 export const signUp = async (req:Request, res:Response) => {
 	const { email, username, password, role} = req.body;
-    const id = uuidv4();
+	const id = uuidv4();
 	try {
 		const hashedPassword = await bcrypt.hash(password, 10);
 		const user = await createUser({ id, email, username, password: hashedPassword, role, is_verified: false });
@@ -35,7 +27,7 @@ export const signUp = async (req:Request, res:Response) => {
 			const url = duoClient.createAuthUrl(username, state);
 			const duoState=state;
 			await redisClient.hSet(duoState,{username});
-			res.json({ url })
+			res.redirect(url);
 		}
 		catch (error) {
 			console.error(error);
@@ -59,11 +51,9 @@ export const redirect = async (req:Request, res:Response) => {
 	req.session.destroy((err) => {
 		if (err) {
 			console.error("Error destroying session:", err);
-			// res.status(500).json({ message: "An error occurred while destroying session." });
 			console.log("Error destroying session:", err);
 			
 		} else {
-			// res.send("Session destroyed successfully");
 			console.log("Session destroyed successfully");
 		}
 	});
@@ -74,7 +64,13 @@ export const redirect = async (req:Request, res:Response) => {
 			savedUsername
 		);
 		console.log("decodedToken", decodedToken);
-		const redirectUrl = clientHost;
+		 // User is authenticated, generate a JWT token
+		const token = jwt.sign(
+			{ savedUsername }, // Payload data
+			jwtSecret, // Secret key
+			{ expiresIn: '1h' } // Token expiration time
+		);
+		const redirectUrl = clientHost+"/login";//Need to change this to the actual redirect url
 		res.redirect(redirectUrl);
 		
 	} catch (err) {

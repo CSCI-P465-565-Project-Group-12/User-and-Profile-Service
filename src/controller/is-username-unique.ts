@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { checkUserNameAvailability } from "../db/users-db";
+import { getUser } from "../db/users-db";
 
 
 // Route to check if a username exists
 export const isUsernameUnique = async (req:Request, res:Response) => {
-	const { username } = req.query || ''; // Using query parameters for simplicity
+	const { username } = req.query || ""; // Using query parameters for simplicity
 	if (!username) {
 		return res.status(400).json({ message: "Please provide a username." });
 	}
 	try {
-		const user = await checkUserNameAvailability(username.toString());
+		const user = await getUser(username.toString());
 		if (user) {
 			res.json({ exists: false, message: "Username already exists." });
 		} else {
