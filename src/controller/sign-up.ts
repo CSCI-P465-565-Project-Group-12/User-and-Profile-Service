@@ -22,7 +22,7 @@ export const signUp = async (req:Request, res:Response) => {
 		const user = await createUser({ id, email, username, password: hashedPassword, role, is_verified: false });
 		try{
 			const url = await duoAuthUrlCreater(username);
-			res.status(302).json({ url });
+			res.json({ url });
 		}
 		catch (error) {
 			console.error(error);
@@ -63,7 +63,7 @@ export const redirect = async (req:Request, res:Response) => {
 			jwtSecret, // Secret key
 			{ expiresIn: '1h' } // Token expiration time
 		);
-		const redirectUrl = clientHost+"/?token="+token;//Need to change this to the actual redirect url.
+		const redirectUrl = clientHost+"post-auth-callback?token="+token;//Need to change this to the actual redirect url.
 		res.redirect(redirectUrl);
 		
 	} catch (err) {
