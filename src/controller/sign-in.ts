@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import { createUser, updateUser, getUser } from "../db/users-db";
 import { createProfile } from "../db/profiles-db";
-import { createSecurity } from "../db/security-db";
+import { duoAuthUrlCreater } from "../helpers/duoAuthUrlCreater";
 import dotenv from "dotenv"; 
 import { v4 as uuidv4 } from "uuid";
 import { redisClient, clientHost, duoClient } from "../app";
@@ -11,17 +11,14 @@ export const signIn = async (req:Request, res:Response) => {
 	const { username, password } = req.body;
 	try {
 		const user = await getUser(username);
+		console.log("user", user);
 		if (!user) {
 			return res.status(401).json({ message: "Invalid username or password." });
 		}
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (isMatch) {
 			try{
-				await duoClient.healthCheck();
-				const state = duoClient.generateState();
-				const url = duoClient.createAuthUrl(username, state);
-				const duoState=state;
-				await redisClient.hSet(duoState,{username});
+				const url = await duoAuthUrlCreater(username);
 				res.status(302).json({url});
 			}
 			catch (error) {
