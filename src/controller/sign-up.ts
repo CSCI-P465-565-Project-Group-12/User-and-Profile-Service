@@ -63,7 +63,7 @@ export const redirect = async (req:Request, res:Response) => {
 			jwtSecret, // Secret key
 			{ expiresIn: '1h' } // Token expiration time
 		);
-		const redirectUrl = clientHost+"/?token="+token;//Need to change this to the actual redirect url
+		const redirectUrl = clientHost+"/?token="+token;//Need to change this to the actual redirect url.
 		res.redirect(redirectUrl);
 		
 	} catch (err) {
