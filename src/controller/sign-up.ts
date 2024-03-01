@@ -22,7 +22,7 @@ export const signUp = async (req:Request, res:Response) => {
 		const user = await createUser({ id, email, username, password: hashedPassword, role, is_verified: false });
 		try{
 			const url = await duoAuthUrlCreater(username);
-			res.json({ url });
+			res.status(302).json({ url });
 		}
 		catch (error) {
 			console.error(error);
@@ -64,7 +64,7 @@ export const redirect = async (req:Request, res:Response) => {
 			{ expiresIn: '1h' } // Token expiration time
 		);
 		const redirectUrl = clientHost+"post-auth-callback?token="+token;//Need to change this to the actual redirect url.
-		res.redirect(redirectUrl);
+		res.status(302).redirect(redirectUrl);
 		
 	} catch (err) {
 		console.error(err);
