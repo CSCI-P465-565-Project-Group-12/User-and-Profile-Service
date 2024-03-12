@@ -1,5 +1,6 @@
 import express from "express";
 import { isUsernameUnique, redirect, signUp, signIn, sendOTP, verifyOTP, resetPassword } from "./controller/index";
+import { validateUserToken } from "./middleware/auth";
 
 
 const router = express.Router();
@@ -12,6 +13,6 @@ router.get("/redirect", redirect);
 router.get("/isusernameunique", isUsernameUnique);
 router.get("/sendotp",sendOTP);
 router.get("/verifyotp",verifyOTP);
-router.post("/resetpassword",resetPassword);
+router.post("/resetpassword", validateUserToken, resetPassword);
 
 export default router;

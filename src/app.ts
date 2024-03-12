@@ -36,7 +36,7 @@ const apiHost = process.env.DUO_API_HOST as string;
 const clientId= process.env.DUO_CLIENT_ID as string;
 const clientSecret = process.env.DUO_CLIENT_SECRET as string;
 const redirectUrl = process.env.REDIRECT_URL as string;
-export const jwtSecret = process.env.JWT_SECRET as string;
+export const jwtSecret = process.env.JWT_PRIVATE_SECRET as string;
 export const duoClient = new Client({ clientId, clientSecret, apiHost, redirectUrl });
 
 redisClient.connect();

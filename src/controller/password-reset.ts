@@ -13,9 +13,14 @@ const API_GATEWAY_URL = process.env.API_GATEWAY_URL || "http://localhost:8081";
 
 export const sendOTP = async (req:Request, res:Response) => {
     const { username } = req.query as { username: string };
+    const redisData = await redisClient.hGetAll('Otp$'+username);
     const user = await getUser(username);
-    const otp = generateOTP();
+    let otp = generateOTP();
+    if (redisData.otp) {
+        otp =  redisData.otp; 
+    }
     await redisClient.hSet('Otp$'+username, {otp});
+    await redisClient.expire('Otp$' + username, 600); //10 min expiration.
     const body = {
         to: user?.email,
         data: {
@@ -38,10 +43,16 @@ export const verifyOTP = async (req:Request, res:Response) => {
         const redisData = await redisClient.hGetAll('Otp$'+username);
         const savedOtp = redisData.otp;
         await redisClient.del('Otp$'+username);
+        const user = await getUser(username);
         const token = jwt.sign(
-			{ username }, // Payload data
-			jwtSecret, // Secret key
-			{ expiresIn: '1h' } // Token expiration time
+			{ 
+                id: user?.id, 
+                username: user?.username,
+                email: user?.email,
+                role: user?.role,
+            },
+			jwtSecret,
+			{ expiresIn: '1h' }
 		);
         if(savedOtp === otp){
             res.status(200).json(token);
@@ -56,9 +67,8 @@ export const verifyOTP = async (req:Request, res:Response) => {
 }
 
 export const resetPassword = async (req:Request, res:Response) => {
-    const { username, password } = req.body;
+    const { username, password, user } = req.body;
     console.log("username", username, "password", password);
-    const user = await getUser(username);
     console.log("user", user);
     try{
         const hashedPassword = await bcrypt.hash(password, 10);
