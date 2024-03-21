@@ -13,7 +13,6 @@ model Users {
   role         UserRole
   is_verified  Boolean
   profile      Profiles?
-  security     Security?
 }
 
 model Profiles {
@@ -24,13 +23,7 @@ model Profiles {
   last_name     String
   contact_number String
   bio           String?
-}
-
-model Security {
-  security_id String @id
-  user        Users   @relation(fields: [user_id], references: [id])
-  user_id      String    @unique
-  duo_auth_id String
+  address       String?
 }
 
 enum UserRole {
