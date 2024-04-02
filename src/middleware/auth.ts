@@ -14,7 +14,7 @@ export const validateUserToken = (req: Request, res: Response, next:NextFunction
         if (err) {
             return res.status(403).json({ message: "Invalid token" });
         }
-        req.body.user = user;
+        req.user = user;
         next();
     });
 }

@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export const createUserProfile = async (req: Request, res: Response) => {
   const { first_name, last_name, contact_number, bio, address } = req.body;
-  const user_id = req.body.user.id;
+  const user_id = req.user.id;
   const profile_id = uuidv4();
   try {
     const profile = await createProfile({
@@ -27,7 +27,7 @@ export const createUserProfile = async (req: Request, res: Response) => {
 
 export const updateUserProfile = async (req: Request, res: Response) => {
   const updateParams = req.body.updateParams;
-  const user_id = req.body.user.id;
+  const user_id = req.user.id;
   try {
     const profile = await updateProfile(user_id, updateParams);
     res.status(200).json(profile);

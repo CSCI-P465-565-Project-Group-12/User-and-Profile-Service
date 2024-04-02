@@ -10,5 +10,6 @@
     "forceConsistentCasingInFileNames": true // Disallow inconsistently-cased references to the same file
   },
   "include": ["src/**/*"], // Files to be included in compilation
-  "exclude": ["node_modules", "**/*.spec.ts"] // Files to be excluded from compilation
+  "exclude": ["node_modules", "**/*.spec.ts"], // Files to be excluded from compilation
+  "files":["types.d.ts"]
 }

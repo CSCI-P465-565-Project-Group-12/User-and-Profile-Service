@@ -67,7 +67,8 @@ export const verifyOTP = async (req:Request, res:Response) => {
 }
 
 export const resetPassword = async (req:Request, res:Response) => {
-    const { username, password, user } = req.body;
+    const user = req.user;
+    const { username, password } = req.body;
     console.log("username", username, "password", password);
     console.log("user", user);
     try{
