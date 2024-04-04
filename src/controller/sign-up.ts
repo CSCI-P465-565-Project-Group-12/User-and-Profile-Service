@@ -73,7 +73,7 @@ export const redirect = async (req: Request, res: Response) => {
       jwtSecret, // Secret key
       { expiresIn: "1h" } // Token expiration time
     );
-    const redirectUrl = clientHost + "post-auth-callback?token=" + token; //Need to change this to the actual redirect url.
+    const redirectUrl = clientHost + "/post-auth-callback?token=" + token; 
     res.status(302).redirect(redirectUrl);
   } catch (err) {
     console.error(err);
