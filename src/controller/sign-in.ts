@@ -30,3 +30,7 @@ export const signIn = async (req: Request, res: Response) => {
       .json({ message: "An error occurred during the sign-in process." });
   }
 };
+
+export const getCurrentUser = async(req: Request, res: Response) => {
+  res.status(200).json(req.user);
+};
