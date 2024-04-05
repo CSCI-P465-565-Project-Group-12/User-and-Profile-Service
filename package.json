@@ -17,7 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "@duosecurity/duo_universal": "^2.0.2",
-    "@prisma/client": "^5.9.1",
+    "@prisma/client": "^5.12.1",
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.1",
