@@ -18,7 +18,7 @@ const router = express.Router();
 // Example route setup
 // router.get('/', appController.someFunction);
 router.post("/signup", signUp);
-router.get("/signin", signIn);
+router.post("/signin", signIn);
 router.get("/redirect", redirect);
 router.get("/isusernameunique", isUsernameUnique);
 router.get("/sendotp", sendOTP);
