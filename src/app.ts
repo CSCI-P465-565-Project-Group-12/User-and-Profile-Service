@@ -26,7 +26,9 @@ const port: number = 8080;
 
 export const redisClient = createClient({
 	password: process.env.REDIS_PASSWORD as string,
+	legacyMode:false,
 	socket: {
+		timeout: 10000,
 		host: process.env.REDIS_HOST as string,
 		port: process.env.REDIS_PORT as unknown as number
 	}
