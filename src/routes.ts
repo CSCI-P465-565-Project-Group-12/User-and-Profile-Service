@@ -28,6 +28,6 @@ router.post("/resetpassword", validateUserToken, resetPassword);
 router.post("/createprofile", validateUserToken, createUserProfile);
 router.post("/updateprofile", validateUserToken, updateUserProfile);
 router.get("/currentuser", validateUserToken, getCurrentUser);
-router.get("/profile/:userid", validateUserToken, getCurrentUserProfile)
+router.get("/profile", validateUserToken, getCurrentUserProfile)
 
 export default router;
