@@ -2,7 +2,7 @@ import { signUp, redirect } from "./sign-up";
 import { isUsernameUnique } from "./is-username-unique";
 import { signIn, getCurrentUser } from "./sign-in";
 import { sendOTP, verifyOTP, resetPassword } from "./password-reset";
-import { createUserProfile, updateUserProfile } from "./profile";
+import { createUserProfile, updateUserProfile, getCurrentUserProfile } from "./profile";
 
 export {
   signUp,
@@ -15,4 +15,5 @@ export {
   createUserProfile,
   updateUserProfile,
   getCurrentUser,
+  getCurrentUserProfile,
 };

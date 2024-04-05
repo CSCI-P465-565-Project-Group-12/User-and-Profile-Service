@@ -38,3 +38,15 @@ export const updateUserProfile = async (req: Request, res: Response) => {
       .json({ message: "An error occurred during profile update." });
   }
 };
+
+export const getCurrentUserProfile = async (req: Request, res: Response) => {
+  try{
+    const user_id = req.user.id;
+    const profile = await getProfile(user_id);
+    res.status(200).json(profile);
+  }
+  catch(error){
+    console.error("Get profile error:", error);
+    res.status(500).json({ message: "An error occurred during profile retrieval." });
+  }
+};

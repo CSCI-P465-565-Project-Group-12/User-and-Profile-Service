@@ -10,6 +10,7 @@ import {
   createUserProfile,
   updateUserProfile,
   getCurrentUser,
+  getCurrentUserProfile,
 } from "./controller/index";
 import { validateUserToken } from "./middleware/auth";
 
@@ -27,5 +28,6 @@ router.post("/resetpassword", validateUserToken, resetPassword);
 router.post("/createprofile", validateUserToken, createUserProfile);
 router.post("/updateprofile", validateUserToken, updateUserProfile);
 router.get("/currentuser", validateUserToken, getCurrentUser);
+router.get("/profile/:userid", validateUserToken, getCurrentUserProfile)
 
 export default router;
