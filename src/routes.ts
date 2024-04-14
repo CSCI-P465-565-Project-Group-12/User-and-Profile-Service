@@ -11,6 +11,7 @@ import {
   updateUserProfile,
   getCurrentUser,
   getCurrentUserProfile,
+  getUserReq,
 } from "./controller/index";
 import { validateUserToken } from "./middleware/auth";
 
@@ -29,5 +30,6 @@ router.post("/createprofile", validateUserToken, createUserProfile);
 router.post("/updateprofile", validateUserToken, updateUserProfile);
 router.get("/currentuser", validateUserToken, getCurrentUser);
 router.get("/profile", validateUserToken, getCurrentUserProfile)
+router.get("/user/:userId", getUserReq);
 
 export default router;

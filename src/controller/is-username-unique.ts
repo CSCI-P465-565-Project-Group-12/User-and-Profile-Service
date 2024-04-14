@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getUser } from "../db/users-db";
+import { getUser, getUserById } from "../db/users-db";
 
 
 // Route to check if a username exists
@@ -18,5 +18,16 @@ export const isUsernameUnique = async (req:Request, res:Response) => {
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ message: "An error occurred while checking the username." });
+	}
+};
+
+export const getUserReq = async (req: Request, res: Response) => {
+	const { userId } = req.params;
+	try {
+		const user = await getUserById(userId);
+		res.status(200).json(user);
+	} catch (error) {
+		console.error("Get user error:", error);
+		res.status(500).json({ message: "An error occurred during user retrieval." });
 	}
 };
