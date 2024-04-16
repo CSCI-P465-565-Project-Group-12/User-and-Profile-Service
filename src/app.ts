@@ -34,8 +34,12 @@ export const redisClient = createClient({
 		port: process.env.REDIS_PORT as unknown as number
 	}
 });
-export const clientHost = process.env.CLIENT_HOST as string;
-export const venueOwnerClientHost = process.env.VENUE_OWNER_CLIENT_HOST as string;
+// export const clientHost = process.env.CLIENT_HOST as string;
+// export const venueOwnerClientHost = process.env.VENUE_OWNER_CLIENT_HOST as string;
+export const tempObj = {
+	RegularUser: process.env.CLIENT_HOST as string,
+	VenueOwner:  process.env.VENUE_OWNER_CLIENT_HOST as string
+}
 const apiHost = process.env.DUO_API_HOST as string;
 const clientId= process.env.DUO_CLIENT_ID as string;
 const clientSecret = process.env.DUO_CLIENT_SECRET as string;

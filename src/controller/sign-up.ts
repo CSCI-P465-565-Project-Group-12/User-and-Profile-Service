@@ -4,14 +4,11 @@ import { createUser, updateUser } from "../db/users-db";
 import { duoAuthUrlCreater } from "../helpers/duoAuthUrlCreater";
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from "uuid";
-import { redisClient, clientHost, duoClient, jwtSecret, venueOwnerClientHost } from "../app";
+import { redisClient, duoClient, jwtSecret, tempObj } from "../app";
 import jwt from "jsonwebtoken";
 dotenv.config();
 
-const tempObj={
-  RegularUser:clientHost,
-  VenueOwner:venueOwnerClientHost
-}
+
 
 /**
  * /signup
