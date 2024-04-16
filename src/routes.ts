@@ -12,6 +12,7 @@ import {
   getCurrentUser,
   getCurrentUserProfile,
   getUserReq,
+  getProfileByUserIdReq,
 } from "./controller/index";
 import { validateUserToken } from "./middleware/auth";
 
@@ -29,7 +30,8 @@ router.post("/resetpassword", validateUserToken, resetPassword);
 router.post("/createprofile", validateUserToken, createUserProfile);
 router.post("/updateprofile", validateUserToken, updateUserProfile);
 router.get("/currentuser", validateUserToken, getCurrentUser);
-router.get("/profile/:userId", validateUserToken, getCurrentUserProfile)
+router.get("/profile/", validateUserToken, getCurrentUserProfile)
+router.get("/profileByUserId/:userId", getProfileByUserIdReq);
 router.get("/user/:userId", getUserReq);
 
 export default router;

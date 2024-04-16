@@ -67,7 +67,7 @@ export const verifyOTP = async (req:Request, res:Response) => {
 }
 
 export const resetPassword = async (req:Request, res:Response) => {
-    const user = req.user;
+    const user = req.user.jwtUserObj;
     const { username, password } = req.body;
     console.log("username", username, "password", password);
     console.log("user", user);
