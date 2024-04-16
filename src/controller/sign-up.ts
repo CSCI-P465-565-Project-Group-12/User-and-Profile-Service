@@ -4,9 +4,14 @@ import { createUser, updateUser } from "../db/users-db";
 import { duoAuthUrlCreater } from "../helpers/duoAuthUrlCreater";
 import dotenv from "dotenv";
 import { v4 as uuidv4 } from "uuid";
-import { redisClient, clientHost, duoClient, jwtSecret } from "../app";
+import { redisClient, clientHost, duoClient, jwtSecret, venueOwnerClientHost } from "../app";
 import jwt from "jsonwebtoken";
 dotenv.config();
+
+const tempObj={
+  RegularUser:clientHost,
+  VenueOwner:venueOwnerClientHost
+}
 
 /**
  * /signup
@@ -73,7 +78,7 @@ export const redirect = async (req: Request, res: Response) => {
       jwtSecret, // Secret key
       { expiresIn: "1h" } // Token expiration time
     );
-    const redirectUrl = clientHost + "/post-auth-callback?token=" + token; 
+    const redirectUrl = tempObj[jwtUserObj.role] + "/post-auth-callback?token=" + token; 
     res.status(302).redirect(redirectUrl);
   } catch (err) {
     console.error(err);

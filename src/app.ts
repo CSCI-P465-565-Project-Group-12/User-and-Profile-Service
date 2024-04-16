@@ -8,6 +8,7 @@ import connectRedis from 'connect-redis';
 
 import dotenv from "dotenv";
 import { Client } from "@duosecurity/duo_universal";
+
 dotenv.config();
 
 
@@ -34,6 +35,7 @@ export const redisClient = createClient({
 	}
 });
 export const clientHost = process.env.CLIENT_HOST as string;
+export const venueOwnerClientHost = process.env.VENUE_OWNER_CLIENT_HOST as string;
 const apiHost = process.env.DUO_API_HOST as string;
 const clientId= process.env.DUO_CLIENT_ID as string;
 const clientSecret = process.env.DUO_CLIENT_SECRET as string;
