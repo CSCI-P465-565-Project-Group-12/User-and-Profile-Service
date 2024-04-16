@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import bcrypt  from "bcrypt";
+import bcrypt  from "bcryptjs";
 import dotenv from "dotenv"; 
 import { redisClient } from "../app";
 import { generateOTP } from "../helpers/generateOTP";

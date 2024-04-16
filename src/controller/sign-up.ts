@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { createUser, updateUser } from "../db/users-db";
 import { duoAuthUrlCreater } from "../helpers/duoAuthUrlCreater";
 import dotenv from "dotenv";
