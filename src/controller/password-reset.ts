@@ -9,7 +9,7 @@ import { jwtSecret } from "../app";
 import jwt from "jsonwebtoken";
 dotenv.config();
 
-const API_GATEWAY_URL = process.env.API_GATEWAY_URL || "http://localhost:8081";
+const MAIL_URL = process.env.MAIL_URL as string;
 
 export const sendOTP = async (req:Request, res:Response) => {
     const { username } = req.query as { username: string };
@@ -29,7 +29,7 @@ export const sendOTP = async (req:Request, res:Response) => {
         }
     };
     try {
-        const response = await axios.post(`${API_GATEWAY_URL}/forgot-password-mail`, body);
+        const response = await axios.post(`${MAIL_URL}/forgot-password-mail`, body);
         res.status(200).json({ message: "OTP sent successfully" });
     } catch (error) {
         console.error("OTP error:", error);
