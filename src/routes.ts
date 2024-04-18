@@ -33,5 +33,9 @@ router.get("/currentuser", validateUserToken, getCurrentUser);
 router.get("/profile/", validateUserToken, getCurrentUserProfile)
 router.get("/profileByUserId/:userId", getProfileByUserIdReq);
 router.get("/user/:userId", getUserReq);
+router.get("/health-check", (req, res) => {
+  console.log("Health check passed");
+  res.status(200).json({ message: "Health check passed" });
+});
 
 export default router;

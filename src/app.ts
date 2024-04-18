@@ -23,7 +23,7 @@ declare module "express-session" {
 
 
 const app: Express = express();
-const port: number = 8080;
+const port = process.env.PORT || 8080;
 
 export const redisClient = createClient({
 	password: process.env.REDIS_PASSWORD as string,
